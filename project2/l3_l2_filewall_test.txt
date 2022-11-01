@@ -1,0 +1,153 @@
+# Test firewall rules
+
+======
+Rule 1
+======
+
+===========
+description
+============
+
+Add new rule to l3config file for blocking ICMP traffic from source IP 192.168.2.10 and
+desti-nation IP 192.168.2.30. 
+
+================
+L3 Firewall Rule
+=================
+1,any,any,192.168.2.10,192.168.2.30,1,1,icmp
+
+=========
+validation
+==========
+h1 ping h3
+
+
+******************************************************************************
+======
+Rule 2
+======
+
+===========
+description
+============
+Add new rule to l3config file for blocking ICMP traffic from source IP 192.168.2.20 and
+desti-nation IP 192.168.2.40
+
+================
+L3 Firewall Rule
+=================
+2,any,any,192.168.2.20,192.168.2.40,1,1,icmp
+
+=========
+validation
+==========
+h2 ping h4
+
+
+******************************************************************************
+======
+Rule 3
+======
+
+===========
+description
+============
+Add new rule to l3config file for blocking HTTP traffic from source IP 
+192.168.2.20.
+
+================
+L3 Firewall Rule
+=================
+#priority,	src_mac,	dst_mac,	src_ip,		dst_ip,	src_port,	dst_port,	nw_proto
+#3	,	any,		any,		192.168.2.20,	any,	80,		80,		tcp
+
+=========
+validation
+==========
+<======to show a working example ======>
+sterm h3,h4
+h3> python3 -m http.server 80
+h4> wget 192.168.2.30
+<=====================================>
+# run this one in another window
+watch -d sudo ovs-ofctl dump-flows s1
+# from the main containernet
+xterm h1 h2 h3 h4
+# for hosts 1,3,4 run those commands
+h1> python3 -m http.server 80  
+h3> python3 -m http.server 80 
+h4> python3 -m http.server 80 
+# from h2 run this command
+h2> wget 192.168.2.10:80
+h2> wget 192.168.2.30:80
+h2> wget 192.168.2.40:80
+******************************************************************************
+======
+Rule 4
+======
+
+===========
+description
+============
+Add new rule to l2config file for blocking traffic from MAC address 00:00:00:00:00:02 to
+desti-nation MAC address 00:00:00:00:00:04.
+
+================
+L2 Firewall Rule
+=================
+1,00:00:00:00:00:02,00:00:00:00:00:04
+
+=========
+validation
+==========
+## TCP/UDP/ICMP and scan all ports to check if any port is open
+## we can use the exampl from the previous lab. 
+## this will show that all the ports are closed
+# removed the -p- so scan will only 1000 most popular ports
+h2 nmap -sT h4
+# UDP ports scan (fast, only 1000 ports)
+h2 nmap -sU h4
+******************************************************************************
+======
+Rule 5
+======
+
+===========
+description
+============
+Add new rule to l3config file for blocking tcp traffic from 192.168.2.10
+to 192.168.2.20.
+
+================
+L3 Firewall Rule
+=================
+4,any,any,192.168.2.10,192.168.2.20,1,1,tcp
+
+=========
+validation
+==========
+h1 hping3 -c 10 h2 -V --tcp-timestamp
+
+
+******************************************************************************
+======
+Rule 6
+======
+
+===========
+description
+============
+Add new rule to l3config file for blocking udp traffic from 192.168.2.10 
+to 192.168.2.20.
+
+================
+L3 Firewall Rule
+=================
+5,any,any,192.168.2.10,192.168.2.20,1,1,udp
+
+=========
+validation
+==========
+h1 hping3 --udp h2 -V
+
+
