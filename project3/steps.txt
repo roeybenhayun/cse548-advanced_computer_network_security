@@ -1,0 +1,24 @@
+Project 3:
+Name - Roey Ben Hayun
+
+1. Setting Mininet
+2. Assigne IP addresses
+3. Perform DoS flood attack on SDN
+3.1 Start Pox
+3.2 open dump-flows
+3.2 pingin - not working, as expected
+4. Mitigate DoS flood attack
+4.1 start pox with l3Firewall.py
+4.2 start flooding 
+4.3 run ping - working! 
+
+One more thing - both l3 and l2 config files are set as empty rule files
+End
+
+
+
+
+
+
+
+
