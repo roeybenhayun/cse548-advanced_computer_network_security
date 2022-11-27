@@ -1,0 +1,11 @@
+SF, 0
+RSTO, 1
+S0, 2
+REJ, 3
+SH, 4
+RSTR, 5
+S1, 6
+RSTOS0, 7
+S3, 8
+S2, 9
+OTH, 10
